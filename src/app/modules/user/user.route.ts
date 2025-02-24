@@ -7,7 +7,9 @@ import { UserController } from './user.controller';
 import { UserValidation } from './user.validation';
 const router = express.Router();
 
-router.post('/create-user', UserController.createUser);
+router.post('/create-buyer', UserController.createUser);
+
+router.post('/create-seller', UserController.createSeller);
 
 router.patch(
   '/update-profile',

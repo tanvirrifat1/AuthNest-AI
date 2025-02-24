@@ -11,6 +11,7 @@ import { User } from './user.model';
 import unlinkFile from '../../../shared/unlinkFile';
 import { IBUYER } from '../buyer/buyer.interface';
 import { Buyer } from '../buyer/buyer.model';
+import { Seller } from '../seller/seller.model';
 
 const createBuyerToDB = async (payload: Partial<IUser & IBUYER>) => {
   const session = await startSession();
@@ -63,6 +64,105 @@ const createBuyerToDB = async (payload: Partial<IUser & IBUYER>) => {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
       { $set: { buyerId: buyer._id } },
+      { session, new: true }
+    );
+    if (!updatedUser) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'User not found for update');
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+    const authentication = {
+      oneTimeCode: otp,
+      expireAt: new Date(Date.now() + 3 * 60000), // OTP valid for 3 minutes
+    };
+
+    // Send email
+    const emailValues: any = {
+      name: payload.name,
+      otp,
+      email: payload.email,
+    };
+    const accountEmailTemplate = emailTemplate.createAccount(emailValues);
+    emailHelper.sendEmail(accountEmailTemplate);
+
+    // Update user with authentication details
+    const updatedAuthenticationUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { authentication } },
+      { session, new: true }
+    );
+
+    if (!updatedAuthenticationUser) {
+      throw new ApiError(
+        StatusCodes.NOT_FOUND,
+        'User not found for authentication update'
+      );
+    }
+
+    // Commit transaction
+    await session.commitTransaction();
+
+    return updatedAuthenticationUser;
+  } catch (error) {
+    // Abort transaction on error
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+};
+const createSellerToDB = async (payload: Partial<IUser & IBUYER>) => {
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+
+    payload.role = USER_ROLES.SELLER;
+
+    // Validate required fields
+    if (!payload.email) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Please provide email');
+    }
+    if (!payload.phone) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        'Please provide phone number'
+      );
+    }
+
+    const isEmail = await User.findOne({ email: payload.email });
+    if (isEmail) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already exists');
+    }
+
+    // Create user first
+    const userPayload = {
+      email: payload.email,
+      role: USER_ROLES.BUYER,
+      password: payload.password,
+    };
+
+    const [user] = await User.create([userPayload], { session });
+    if (!user) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
+    }
+
+    // Create client and associate with user
+    const sellerPayload = {
+      ...payload,
+      userId: user._id,
+    };
+
+    const [seller] = await Seller.create([sellerPayload], { session });
+    if (!seller) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create client');
+    }
+
+    // Update user with client reference
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { sellerId: seller._id } },
       { session, new: true }
     );
     if (!updatedUser) {
@@ -249,4 +349,5 @@ export const UserService = {
   updateProfileToDB,
   getAllUsers,
   getSingleUser,
+  createSellerToDB,
 };
