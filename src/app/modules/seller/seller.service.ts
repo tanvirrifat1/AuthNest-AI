@@ -8,9 +8,10 @@ const updateSellerToDB = async (id: string, payload: UpdateSellerPayload) => {
   const isExistSeller = await Seller.findOne({ _id: id });
 
   if (!isExistSeller) {
-    throw new ApiError(StatusCodes.NOT_FOUND, "Influencer doesn't exist!");
+    throw new ApiError(StatusCodes.NOT_FOUND, "Seller doesn't exist!");
   }
 
+  // Handle images to delete
   if (payload.imagesToDelete && payload.imagesToDelete.length > 0) {
     for (let image of payload.imagesToDelete) {
       unlinkFile(image);
@@ -21,16 +22,34 @@ const updateSellerToDB = async (id: string, payload: UpdateSellerPayload) => {
     );
   }
 
+  // Handle documents to delete
+  if (payload.documentsToDelete && payload.documentsToDelete.length > 0) {
+    for (let document of payload.documentsToDelete) {
+      unlinkFile(document);
+    }
+    // Remove deleted documents from the existing document array
+    isExistSeller.document = isExistSeller.document.filter(
+      (doc: string) => !payload.documentsToDelete!.includes(doc)
+    );
+  }
+
+  // Handle new image uploads
   const updatedImages = payload.image
     ? [...isExistSeller.image, ...payload.image]
     : isExistSeller.image;
 
+  // Handle new document uploads (documentsToDelete filter is not needed again)
+  const updatedDocuments = payload.document
+    ? [...isExistSeller.document, ...payload.document]
+    : isExistSeller.document;
+
   const updateData = {
     ...payload,
     image: updatedImages,
+    document: updatedDocuments,
   };
 
-  // Step 4: Save the updated influencer data
+  // Save the updated seller data
   const result = await Seller.findOneAndUpdate({ _id: id }, updateData, {
     new: true,
   });

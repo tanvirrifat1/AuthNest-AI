@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
+
 import fileUploadHandler from '../../middlewares/fileUploadHandler';
 import auth from '../../middlewares/auth';
 import { USER_ROLES } from '../../../enums/user';
@@ -12,10 +13,14 @@ router.patch(
   auth(USER_ROLES.SELLER),
   fileUploadHandler,
   (req: Request, res: Response, next: NextFunction) => {
-    const { imagesToDelete, data } = req.body;
+    const { imagesToDelete, documentsToDelete, data } = req.body;
 
     if (!data && imagesToDelete) {
       req.body = { imagesToDelete };
+      return SellerController.updateController(req, res, next);
+    }
+    if (!data && documentsToDelete) {
+      req.body = { documentsToDelete };
       return SellerController.updateController(req, res, next);
     }
 
@@ -24,7 +29,7 @@ router.patch(
         JSON.parse(data)
       );
 
-      req.body = { ...parsedData, imagesToDelete };
+      req.body = { ...parsedData, imagesToDelete, documentsToDelete };
     }
 
     return SellerController.updateController(req, res, next);

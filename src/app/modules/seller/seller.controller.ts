@@ -18,8 +18,6 @@ const updateController = catchAsync(async (req, res) => {
     value.image = image;
   }
 
-  console.log(image);
-
   if (document && document.length > 0) {
     value.document = document;
   }

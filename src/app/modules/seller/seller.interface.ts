@@ -12,5 +12,6 @@ export type ISELLER = {
 };
 
 export type UpdateSellerPayload = Partial<ISELLER> & {
+  documentsToDelete?: string[];
   imagesToDelete?: string[];
 };
