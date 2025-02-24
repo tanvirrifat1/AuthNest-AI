@@ -14,7 +14,7 @@ router.post('/create-seller', UserController.createSeller);
 router.patch(
   '/update-profile',
   fileUploadHandler,
-  auth(USER_ROLES.BUYER, USER_ROLES.ADMIN),
+  auth(USER_ROLES.BUYER, USER_ROLES.ADMIN, USER_ROLES.SELLER),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse the body if it contains data in stringified JSON format

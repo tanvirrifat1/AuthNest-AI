@@ -5,7 +5,8 @@ export type IBUYER = {
   email: string;
   address: string;
   status: 'active' | 'deleted';
-  image: string;
+  image: string[];
+  document: string[];
   phone: string;
   userId: Types.ObjectId;
 };

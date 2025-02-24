@@ -5,7 +5,12 @@ export type ISELLER = {
   email: string;
   address: string;
   status: 'active' | 'deleted';
-  image: string;
+  image: string[];
+  document: string[];
   phone: string;
   userId: Types.ObjectId;
+};
+
+export type UpdateSellerPayload = Partial<ISELLER> & {
+  imagesToDelete?: string[];
 };

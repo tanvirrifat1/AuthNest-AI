@@ -16,6 +16,8 @@ import cryptoToken from '../../../util/cryptoToken';
 import generateOTP from '../../../util/generateOTP';
 import { User } from '../user/user.model';
 import { ResetToken } from '../resetToken/resetToken.model';
+import { Buyer } from '../buyer/buyer.model';
+import { Seller } from '../seller/seller.model';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
@@ -49,9 +51,18 @@ const loginUserFromDB = async (payload: ILoginData) => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
   }
 
+  const isSeller = await Seller.findOne({ userId: isExistUser._id });
+
+  const isBuyer = await Buyer.findOne({ userId: isExistUser._id });
+
   //create token
   const accessToken = jwtHelper.createToken(
-    { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+    {
+      userId: isExistUser._id,
+      roleBaseId: isSeller ? isSeller._id : isBuyer ? isBuyer._id : null,
+      role: isExistUser.role,
+      email: isExistUser.email,
+    },
     config.jwt.jwt_secret as Secret,
     '35d'
   );

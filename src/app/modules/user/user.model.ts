@@ -46,22 +46,10 @@ const userSchema = new Schema<IUser, UserModal>(
       type: Boolean,
       default: false,
     },
-    image: [
-      {
-        type: String,
-        default: false,
-      },
-    ],
-    document: [
-      {
-        type: String,
-        default: false,
-      },
-    ],
-    video: {
-      type: String,
-      default: false,
-    },
+    image: [{ type: String, select: false }],
+    document: [{ type: String, select: false }],
+    video: { type: String, select: false },
+
     authentication: {
       type: {
         isResetPassword: {

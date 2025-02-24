@@ -19,8 +19,6 @@ const createBuyerToDB = async (payload: Partial<IUser & IBUYER>) => {
   try {
     session.startTransaction();
 
-    payload.role = USER_ROLES.BUYER;
-
     // Validate required fields
     if (!payload.email) {
       throw new ApiError(StatusCodes.BAD_REQUEST, 'Please provide email');
@@ -118,8 +116,6 @@ const createSellerToDB = async (payload: Partial<IUser & IBUYER>) => {
   try {
     session.startTransaction();
 
-    payload.role = USER_ROLES.SELLER;
-
     // Validate required fields
     if (!payload.email) {
       throw new ApiError(StatusCodes.BAD_REQUEST, 'Please provide email');
@@ -139,7 +135,7 @@ const createSellerToDB = async (payload: Partial<IUser & IBUYER>) => {
     // Create user first
     const userPayload = {
       email: payload.email,
-      role: USER_ROLES.BUYER,
+      role: USER_ROLES.SELLER,
       password: payload.password,
     };
 
