@@ -36,13 +36,13 @@ router.post(
 
 router.delete(
   '/delete-account',
-  auth(USER_ROLES.USER),
+  auth(USER_ROLES.BUYER),
   AuthController.deleteAccount
 );
 
 router.post(
   '/change-password',
-  auth(USER_ROLES.ADMIN, USER_ROLES.USER),
+  auth(USER_ROLES.ADMIN, USER_ROLES.BUYER),
   validateRequest(AuthValidation.createChangePasswordZodSchema),
   AuthController.changePassword
 );

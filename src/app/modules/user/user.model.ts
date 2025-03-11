@@ -46,8 +46,8 @@ const userSchema = new Schema<IUser, UserModal>(
       type: Boolean,
       default: false,
     },
-    image: [{ type: String, select: false }],
-    document: [{ type: String, select: false }],
+    image: { type: String },
+
     video: { type: String, select: false },
 
     authentication: {

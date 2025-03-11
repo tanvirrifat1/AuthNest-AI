@@ -314,13 +314,13 @@ const updateProfileToDB = async (
     }
   }
 
-  if (payload.document && isExistUser.document) {
-    if (Array.isArray(isExistUser.document)) {
-      isExistUser.document.forEach((doc: string) => unlinkFile(doc));
-    } else {
-      unlinkFile(isExistUser.document as string);
-    }
-  }
+  // if (payload.document && isExistUser.document) {
+  //   if (Array.isArray(isExistUser.document)) {
+  //     isExistUser.document.forEach((doc: string) => unlinkFile(doc));
+  //   } else {
+  //     unlinkFile(isExistUser.document as string);
+  //   }
+  // }
 
   // Delete old video if a new video is provided
   if (payload.video && isExistUser.video) {

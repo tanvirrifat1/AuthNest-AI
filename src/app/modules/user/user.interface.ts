@@ -8,8 +8,7 @@ export type IUser = {
   password: string;
   status: 'active' | 'delete';
   verified: boolean;
-  image?: string[];
-  document?: string[];
+  image?: string;
   subscription?: boolean;
   video?: string;
   phone?: string;

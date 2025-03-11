@@ -12,7 +12,7 @@ router.patch(
   '/update-profile',
   auth(USER_ROLES.SELLER),
   fileUploadHandler,
-  (req: Request, res: Response, next: NextFunction) => {
+  (req, res, next) => {
     const { imagesToDelete, documentsToDelete, data } = req.body;
 
     if (!data && imagesToDelete) {

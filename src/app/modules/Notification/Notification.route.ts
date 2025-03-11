@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get(
   '/',
-  auth(USER_ROLES.USER),
+  auth(USER_ROLES.BUYER),
   NotificationController.getNotificationToDb
 );
 
 router.patch(
   '/',
-  auth(USER_ROLES.USER),
+  auth(USER_ROLES.BUYER),
   NotificationController.readNotification
 );
 
