@@ -3,7 +3,16 @@ import sendResponse from '../../../shared/sendResponse';
 import { QuestionAndAnsService } from './questionAndAns.service';
 
 const createChat = catchAsync(async (req, res) => {
-  const result = await QuestionAndAnsService.createChat(req.body);
+  const user = req.user.roleBaseId;
+
+  console.log(user, 'userId');
+
+  const value = {
+    ...req.body,
+    user,
+  };
+
+  const result = await QuestionAndAnsService.createChat(value);
 
   sendResponse(res, {
     success: true,

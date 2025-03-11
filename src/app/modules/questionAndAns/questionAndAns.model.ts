@@ -32,6 +32,6 @@ const questionAndAnsSchema = new Schema<IQuestionAndAns>(
 );
 
 export const QuestionAndAns = model<IQuestionAndAns>(
-  'IQuestionAndAns',
+  'QuestionAndAns',
   questionAndAnsSchema
 );
