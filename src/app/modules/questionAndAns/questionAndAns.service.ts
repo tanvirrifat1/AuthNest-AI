@@ -80,12 +80,6 @@ const createChat = async (payload: IQuestionAndAns) => {
   return res;
 };
 
-//   const res = await QuestionAndAns.create({ ...payload, room: room._id });
-
-//   if (!res) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "Request couldn't be created!");
-//   }
-
 export const QuestionAndAnsService = {
   createChat,
 };
