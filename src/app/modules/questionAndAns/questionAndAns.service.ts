@@ -67,11 +67,11 @@ const createChat = async (payload: IQuestionAndAns) => {
     });
   }
 
-  await result.choices[0].message?.content;
+  const answer = result.choices[0].message?.content;
 
   const value = {
     question: payload.question,
-    answer: result.choices[0].message?.content,
+    answer: answer,
     room: room._id,
     user: payload.user,
   };
