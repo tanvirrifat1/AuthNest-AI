@@ -4,6 +4,7 @@ import { UserRoutes } from '../app/modules/user/user.route';
 import { NotificationRoutes } from '../app/modules/Notification/Notification.route';
 import { SellerRoute } from '../app/modules/seller/seller.route';
 import { QuestionAndAnsRoutes } from '../app/modules/questionAndAns/questionAndAns.route';
+import { RoomRoutes } from '../app/modules/room/room.route';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const apiRoutes = [
   { path: '/notification', route: NotificationRoutes },
   { path: '/seller', route: SellerRoute },
   { path: '/question', route: QuestionAndAnsRoutes },
+  { path: '/room', route: RoomRoutes },
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));

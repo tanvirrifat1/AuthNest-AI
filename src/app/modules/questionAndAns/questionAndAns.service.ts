@@ -58,7 +58,7 @@ const createChat = async (payload: IQuestionAndAns) => {
       roomId = room.roomName;
     }
   }
-  console.log(payload.createRoom);
+
   if (!room || payload.createRoom) {
     const formattedDate = moment().format('HH:mm:ss');
     room = await Room.create({
