@@ -81,6 +81,52 @@ const createChat = async (payload: IQuestionAndAns) => {
   return res;
 };
 
+const getQuestionAndAns = async (
+  query: Record<string, unknown>,
+  roomId: string
+) => {
+  const { page, limit, searchTerm, ...filterData } = query;
+  const anyConditions: any[] = [];
+
+  anyConditions.push({ room: roomId });
+
+  if (Object.keys(filterData).length > 0) {
+    const filterConditions = Object.entries(filterData).map(
+      ([field, value]) => ({ [field]: value })
+    );
+    anyConditions.push({ $and: filterConditions });
+  }
+
+  const whereConditions =
+    anyConditions.length > 0 ? { $and: anyConditions } : {};
+
+  // Pagination setup
+  const pages = parseInt(page as string) || 1;
+  const size = parseInt(limit as string) || 10;
+  const skip = (pages - 1) * size;
+
+  const result = await QuestionAndAns.find(whereConditions)
+    .populate({
+      path: 'room',
+      select: 'roomName',
+    })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(size)
+    .lean();
+
+  const count = await QuestionAndAns.countDocuments(whereConditions);
+
+  return {
+    result,
+    meta: {
+      page: pages,
+      total: count,
+    },
+  };
+};
+
 export const QuestionAndAnsService = {
   createChat,
+  getQuestionAndAns,
 };

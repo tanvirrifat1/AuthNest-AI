@@ -1,4 +1,4 @@
-type IFolderName = 'image' | 'media' | 'doc' | 'images' | 'medias' | 'docs';
+export type IFolderName = 'image' | 'media' | 'doc' | 'txt';
 
 export const getFilePathMultiple = (
   files: any,

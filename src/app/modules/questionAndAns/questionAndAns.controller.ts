@@ -21,6 +21,21 @@ const createChat = catchAsync(async (req, res) => {
   });
 });
 
+const getQuestionAndAns = catchAsync(async (req, res) => {
+  const result = await QuestionAndAnsService.getQuestionAndAns(
+    req.query,
+    req.params.roomId
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Question and answer retrived successfully',
+    data: result,
+  });
+});
+
 export const QuestionAndAnsController = {
   createChat,
+  getQuestionAndAns,
 };

@@ -11,4 +11,10 @@ router.get(
   RoomController.getRecentChatRooms
 );
 
+router.get(
+  '/get-previous-chat-rooms',
+  auth(USER_ROLES.BUYER, USER_ROLES.SELLER),
+  RoomController.getPreviousChatRooms
+);
+
 export const RoomRoutes = router;

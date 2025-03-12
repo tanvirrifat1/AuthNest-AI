@@ -15,6 +15,20 @@ const getRecentChatRooms = catchAsync(async (req, res) => {
   });
 });
 
+const getPreviousChatRooms = catchAsync(async (req, res) => {
+  const userId = req.user.roleBaseId;
+
+  const result = await RoomService.getPreviousChatRooms(req.query, userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'Chat rooms retrived successfully',
+    data: result,
+  });
+});
+
 export const RoomController = {
   getRecentChatRooms,
+  getPreviousChatRooms,
 };

@@ -11,4 +11,10 @@ router.post(
   QuestionAndAnsController.createChat
 );
 
+router.get(
+  '/get-question-and-ans/:roomId',
+  auth(USER_ROLES.BUYER, USER_ROLES.SELLER),
+  QuestionAndAnsController.getQuestionAndAns
+);
+
 export const QuestionAndAnsRoutes = router;
