@@ -6,20 +6,20 @@ import path from 'path';
 import ApiError from '../../errors/ApiError';
 
 const fileUploadHandler = (req: Request, res: Response, next: NextFunction) => {
-  //create upload folder
+  // Create upload folder if it doesn't exist
   const baseUploadDir = path.join(process.cwd(), 'uploads');
   if (!fs.existsSync(baseUploadDir)) {
     fs.mkdirSync(baseUploadDir);
   }
 
-  //folder create for different file
+  // Function to create directories for different file types
   const createDir = (dirPath: string) => {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
     }
   };
 
-  //create filename
+  // Set storage for file uploads
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       let uploadDir;
@@ -41,14 +41,15 @@ const fileUploadHandler = (req: Request, res: Response, next: NextFunction) => {
     },
 
     filename: (req, file, cb) => {
-      const fileExt =
-        file.fieldname === 'doc' ||
-        file.fieldname === 'docs' ||
-        file.fieldname === 'docx'
-          ? '.pdf'
-          : '.png';
+      let fileExt = '.png'; // Default for images
 
-      if (file.fieldname === 'media') {
+      if (file.fieldname === 'doc') {
+        if (file.mimetype === 'application/pdf') {
+          fileExt = '.pdf';
+        } else if (file.mimetype === 'text/plain') {
+          fileExt = '.txt';
+        }
+      } else if (file.fieldname === 'media') {
         const mediaExt = file.mimetype.split('/')[1];
         cb(null, `${file.originalname.replace(/\s/g, '-')}.${mediaExt}`);
         return;
@@ -65,18 +66,20 @@ const fileUploadHandler = (req: Request, res: Response, next: NextFunction) => {
     },
   });
 
-  //file filter
+  // File filter function to validate file types
   const filterFilter = (req: Request, file: any, cb: FileFilterCallback) => {
     if (file.fieldname === 'image') {
       if (
-        file.mimetype === 'image/jpeg' ||
-        file.mimetype === 'image/png' ||
-        file.mimetype === 'image/jpg' ||
-        file.mimetype === 'image/heif' || // Add HEIF support
-        file.mimetype === 'image/heic' || // HEIC support (HEIF is often associated with .heic files)
-        file.mimetype === 'image/tiff' || // Add TIFF support
-        file.mimetype === 'image/webp' || // Add WebP support
-        file.mimetype === 'image/avif' // Add AVIF support
+        [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/heif',
+          'image/heic',
+          'image/tiff',
+          'image/webp',
+          'image/avif',
+        ].includes(file.mimetype)
       ) {
         cb(null, true);
       } else {
@@ -88,28 +91,35 @@ const fileUploadHandler = (req: Request, res: Response, next: NextFunction) => {
         );
       }
     } else if (file.fieldname === 'media') {
-      if (file.mimetype === 'video/mp4' || file.mimetype === 'audio/mpeg') {
+      if (['video/mp4', 'audio/mpeg'].includes(file.mimetype)) {
         cb(null, true);
       } else {
         cb(
           new ApiError(
             StatusCodes.BAD_REQUEST,
-            'Only .mp4, .mp3, file supported'
+            'Only .mp4, .mp3 files supported'
           )
         );
       }
     } else if (file.fieldname === 'doc') {
-      if (file.mimetype === 'application/pdf') {
+      if (['application/pdf', 'text/plain'].includes(file.mimetype)) {
         cb(null, true);
       } else {
-        cb(new ApiError(StatusCodes.BAD_REQUEST, 'Only pdf supported'));
+        cb(
+          new ApiError(
+            StatusCodes.BAD_REQUEST,
+            'Only .pdf and .txt files supported'
+          )
+        );
       }
     } else {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'This file is not supported');
+      cb(
+        new ApiError(StatusCodes.BAD_REQUEST, 'This file type is not supported')
+      );
     }
   };
 
-  // Return multer middleware
+  // Return multer middleware for handling file uploads
   const upload = multer({
     storage: storage,
     fileFilter: filterFilter,

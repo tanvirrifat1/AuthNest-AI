@@ -25,6 +25,9 @@ const questionAndAnsSchema = new Schema<IQuestionAndAns>(
       type: Boolean,
       default: false,
     },
+    document: {
+      type: String,
+    },
   },
   {
     timestamps: true,
