@@ -33,6 +33,13 @@ const updateSellerToDB = async (id: string, payload: UpdateSellerPayload) => {
     );
   }
 
+  // Handle videos to delete
+  if (payload.videosToDelete && payload.videosToDelete.length > 0) {
+    for (let video of payload.videosToDelete) {
+      unlinkFile(video);
+    }
+  }
+
   // Handle new image uploads
   const updatedImages = payload.image
     ? [...isExistSeller.image, ...payload.image]

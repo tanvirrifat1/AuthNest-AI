@@ -13,6 +13,7 @@ const updateController = catchAsync(async (req, res) => {
 
   let image = getFilePathMultiple(req.files, 'image', 'image');
   let document = getFilePathMultiple(req.files, 'doc', 'doc');
+  let media = getFilePathMultiple(req.files, 'media', 'media');
 
   if (image && image.length > 0) {
     value.image = image;
@@ -21,6 +22,12 @@ const updateController = catchAsync(async (req, res) => {
   if (document && document.length > 0) {
     value.document = document;
   }
+
+  if (media && media.length > 0) {
+    value.video = media;
+  }
+
+  console.log(value);
 
   const result = await SellerService.updateSellerToDB(id, value);
   sendResponse(res, {

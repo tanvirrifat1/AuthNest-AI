@@ -13,7 +13,8 @@ router.patch(
   auth(USER_ROLES.SELLER),
   fileUploadHandler,
   (req, res, next) => {
-    const { imagesToDelete, documentsToDelete, data } = req.body;
+    const { imagesToDelete, documentsToDelete, videosToDelete, data } =
+      req.body;
 
     if (!data && imagesToDelete) {
       req.body = { imagesToDelete };
@@ -21,6 +22,10 @@ router.patch(
     }
     if (!data && documentsToDelete) {
       req.body = { documentsToDelete };
+      return SellerController.updateController(req, res, next);
+    }
+    if (!data && videosToDelete) {
+      req.body = { videosToDelete };
       return SellerController.updateController(req, res, next);
     }
 

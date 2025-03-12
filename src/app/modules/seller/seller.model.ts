@@ -12,6 +12,7 @@ const sellerSchema = new Schema<ISELLER>(
       default: 'active',
     },
     image: [{ type: String }],
+    video: [{ type: String }],
     document: [{ type: String }],
     phone: { type: String, required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
