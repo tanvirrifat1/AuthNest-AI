@@ -10,3 +10,9 @@ export type IBUYER = {
   phone: string;
   userId: Types.ObjectId;
 };
+
+export type UpdateBuyerPayload = Partial<IBUYER> & {
+  documentsToDelete?: string[];
+  imagesToDelete?: string[];
+  videosToDelete?: string[];
+};
