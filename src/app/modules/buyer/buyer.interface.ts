@@ -7,6 +7,7 @@ export type IBUYER = {
   status: 'active' | 'deleted';
   image: string[];
   document: string[];
+  video: string[];
   phone: string;
   userId: Types.ObjectId;
 };

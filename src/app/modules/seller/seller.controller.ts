@@ -27,8 +27,6 @@ const updateController = catchAsync(async (req, res) => {
     value.video = media;
   }
 
-  console.log(value);
-
   const result = await SellerService.updateSellerToDB(id, value);
   sendResponse(res, {
     success: true,

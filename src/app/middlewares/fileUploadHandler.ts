@@ -50,8 +50,9 @@ const fileUploadHandler = (req: Request, res: Response, next: NextFunction) => {
           fileExt = '.txt';
         }
       } else if (file.fieldname === 'media') {
-        const mediaExt = file.mimetype.split('/')[1];
-        cb(null, `${file.originalname.replace(/\s/g, '-')}.${mediaExt}`);
+        // const mediaExt = file.mimetype.split('/')[1];
+
+        cb(null, `${file.originalname.replace(/\s/g, '-')}`);
         return;
       }
 
