@@ -110,6 +110,7 @@ const createBuyerToDB = async (payload: Partial<IUser & IBUYER>) => {
     await session.endSession();
   }
 };
+
 const createSellerToDB = async (payload: Partial<IUser & IBUYER>) => {
   const session = await startSession();
 

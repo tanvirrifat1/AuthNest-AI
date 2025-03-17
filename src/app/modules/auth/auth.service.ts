@@ -155,7 +155,7 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
     await ResetToken.create({
       user: isExistUser._id,
       token: createToken,
-      expireAt: new Date(Date.now() + 5 * 60000),
+      expireAt: new Date(Date.now() + 30 * 60000),
     });
     message =
       'Verification Successful: Please securely store and utilize this code for reset password';
