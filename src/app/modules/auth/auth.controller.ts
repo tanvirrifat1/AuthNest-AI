@@ -4,6 +4,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { AuthService } from './auth.service';
 import config from '../../../config';
+import ApiError from '../../../errors/ApiError';
 
 const verifyEmail = catchAsync(async (req: Request, res: Response) => {
   const { ...verifyData } = req.body;
@@ -46,10 +47,34 @@ const forgetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// const resetPassword = catchAsync(async (req: Request, res: Response) => {
+//   const token = req.headers.authorization;
+//   const { ...resetData } = req.body;
+//   const result = await AuthService.resetPasswordToDB(token!, resetData);
+
+//   sendResponse(res, {
+//     success: true,
+//     statusCode: StatusCodes.OK,
+//     message: 'Password reset successfully',
+//     data: result,
+//   });
+// });
+
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith('Bearer ')
+    ? authHeader.split(' ')[1]
+    : null;
+
+  if (!token) {
+    throw new ApiError(
+      StatusCodes.UNAUTHORIZED,
+      'Unauthorized: No token provided'
+    );
+  }
+
   const { ...resetData } = req.body;
-  const result = await AuthService.resetPasswordToDB(token!, resetData);
+  const result = await AuthService.resetPasswordToDB(token, resetData);
 
   sendResponse(res, {
     success: true,

@@ -151,15 +151,26 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
     );
 
     //create token ;
-    const createToken = cryptoToken();
+    const accessToken = jwtHelper.createToken(
+      { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+      config.jwt.jwt_secret as Secret,
+      '35d'
+    );
+
+    const refreshToken = jwtHelper.createToken(
+      { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+      config.jwt.jwtRefreshSecret as Secret,
+      '65d'
+    );
+
     await ResetToken.create({
       user: isExistUser._id,
-      token: createToken,
+      token: accessToken,
       expireAt: new Date(Date.now() + 30 * 60000),
     });
     message =
       'Verification Successful: Please securely store and utilize this code for reset password';
-    data = createToken;
+    data = { accessToken, refreshToken };
   }
   return { data, message };
 };
