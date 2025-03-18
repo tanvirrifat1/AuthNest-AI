@@ -6,6 +6,7 @@ import { SellerRoute } from '../app/modules/seller/seller.route';
 import { QuestionAndAnsRoutes } from '../app/modules/questionAndAns/questionAndAns.route';
 import { RoomRoutes } from '../app/modules/room/room.route';
 import { BuyerRoute } from '../app/modules/buyer/buyer.route';
+import { sendMailRoutes } from '../app/modules/sendMail/sendMail.route';
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ const apiRoutes = [
   { path: '/buyer', route: BuyerRoute },
   { path: '/question', route: QuestionAndAnsRoutes },
   { path: '/room', route: RoomRoutes },
+  { path: '/mail', route: sendMailRoutes },
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));
