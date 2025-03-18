@@ -3,7 +3,11 @@ import ApiError from '../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
 import config from '../config';
 
-export async function sendEmail(email: string, subject: string, text: string) {
+export async function sendEmail(
+  email: string[],
+  subject: string,
+  text: string
+) {
   try {
     const transporter = nodemailer.createTransport({
       host: config.email.host,
