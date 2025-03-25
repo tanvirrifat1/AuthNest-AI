@@ -21,7 +21,6 @@ const router = express.Router();
 
 router.post(
   '/create-chat',
-
   auth(USER_ROLES.BUYER, USER_ROLES.SELLER),
   QuestionAndAnsController.createChat
 );

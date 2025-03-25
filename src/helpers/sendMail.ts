@@ -3,11 +3,7 @@ import ApiError from '../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
 import config from '../config';
 
-export async function sendEmail(
-  email: string[],
-  subject: string,
-  text: string
-) {
+export async function sendEmail(email: string, subject: string, text: string) {
   try {
     const transporter = nodemailer.createTransport({
       host: config.email.host,
@@ -20,104 +16,90 @@ export async function sendEmail(
     });
 
     const info = await transporter.sendMail({
-      from: `"PET-CLOTH" ${config.email.from}`, // Sender address
-      to: email, // Recipient's email
-      subject: `${subject}`, // Subject line
-      text: text, // Plain text version
+      from: `"FARBABYZ-DRIP" ${config.email.from}`,
+      to: email,
+      subject: subject,
       html: `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Promotional Email</title>
+          <title>Premium Email Design</title>
           <style>
-            /* Reset styles */
-            body, html {
-              margin: 0;
-              padding: 0;
-              font-family: Arial, sans-serif;
-            }
-    
-            /* Container styles */
-            .container {
-              max-width: 600px;
-              margin: 20px auto;
-              padding: 20px;
-              border: 1px solid #ccc;
-              border-radius: 10px;
-              background-color: #fff;
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-    
-            /* Header styles */
-            .header {
-              background-color: #caccd1; /* New blue background */
-              padding: 20px;
-              border-radius: 10px 10px 0 0;
-              color: #000000;
-              text-align: center;
-            }
-            .header h1 {
-              margin: 0;
-            }
-    
-            /* Content styles */
-            .content {
-              padding: 20px;
-              text-align: left;
-              font-size: 16px;
-              line-height: 1.6;
-              color: #333;
-            }
-    
-            /* Footer styles */
-            .footer {
-              background-color: #caccd1; /* New green background */
-              padding: 15px;
-              border-radius: 0 0 10px 10px;
-              text-align: center;
-              color: #000000;
-              font-size: 12px;
-            }
-    
-            /* Button styles */
-            .btn {
-              display: inline-block;
-              padding: 10px 20px;
-              margin-top: 10px;
-              background-color: #FF6600;
-              color: #fff;
-              text-decoration: none;
-              border-radius: 5px;
-              font-weight: bold;
-            }
-    
-            /* Responsive styles */
-            @media (max-width: 600px) {
+              body {
+                  font-family: 'Arial', sans-serif;
+                  background-color: #f4f4f4;
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+              }
               .container {
-                padding: 10px;
+                  background-color: #fff;
+                  border-radius: 10px;
+                  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                  width: 80%;
+                  max-width: 600px;
+                  overflow: hidden;
+              }
+              .header {
+                  background-color: #3498db;
+                  color: #fff;
+                  text-align: center;
+                  padding: 2rem;
+              }
+              .header h1 {
+                  margin: 0;
+                  font-size: 2.5rem;
               }
               .content {
-                font-size: 14px;
+                  padding: 2rem;
+                  color: #555;
+                  line-height: 1.6;
               }
-            }
+              .content p {
+                  margin-bottom: 1.5rem;
+              }
+              .button {
+                  display: inline-block;
+                  padding: 1rem 2rem;
+                  background-color: #e74c3c;
+                  color: #fff;
+                  text-decoration: none;
+                  border-radius: 5px;
+                  font-weight: bold;
+                  transition: background-color 0.3s ease;
+              }
+              .button:hover {
+                  background-color: #c0392b;
+              }
+              .footer {
+                  background-color: #2c3e50;
+                  color: #fff;
+                  text-align: center;
+                  padding: 1rem;
+                  font-size: 0.8rem;
+              }
           </style>
-        </head>
-        <body>
+      </head>
+      <body>
           <div class="container">
-            <div class="header">
-              <h1>${subject}</h1>
-            </div>
-            <div class="content">
-              <p>${text}</p>
-            </div>
-            <div class="footer">
-              <p>&copy; ${new Date().getFullYear()} FARBABYZ-DRIP. All rights reserved.</p>
-            </div>
+              <div class="header">
+                  <h1>${subject}</h1>
+              </div>
+              <div class="content">
+                  <p>${text}</p>
+                  <a href="#" class="button">Explore More</a>
+              </div>
+              <div class="footer">
+                  &copy; ${new Date().getFullYear()} FARBABYZ-DRIP. All rights reserved.
+              </div>
           </div>
-        </body>
-        </html>
+      </body>
+      </html>
       `,
     });
 

@@ -13,12 +13,6 @@ const createChat = catchAsync(async (req, res) => {
     user,
   };
 
-  // let document = getFilePathMultiple(req.files, 'doc', 'doc');
-
-  // if (document && document.length > 0) {
-  //   value.document = document[0];
-  // }
-
   const result = await QuestionAndAnsService.createChat(value);
 
   sendResponse(res, {
