@@ -129,14 +129,10 @@ const createChat = async (payload: IQuestionAndAns) => {
     });
   }
 
-  console.log(room, 'room');
-
   // Step 3: Fetch previous chat history from the room
   const previousChats = await QuestionAndAns.find({ room: room._id })
     .sort({ createdAt: 1 }) // Sort by creation time to maintain order
     .select('question answer');
-
-  console.log(previousChats, 'previousChats');
 
   // Step 4: Prepare messages with previous chat context
   const messages = [
