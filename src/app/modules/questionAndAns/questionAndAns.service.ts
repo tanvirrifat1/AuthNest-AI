@@ -99,9 +99,9 @@ const createChat = async (payload: IQuestionAndAns) => {
     ?.trim()
     .toLowerCase();
 
-  // if (isBusinessRelated !== 'yes') {
-  //   return 'I only answer business-related questions.';
-  // }
+  if (isBusinessRelated !== 'yes') {
+    return 'I only answer business-related questions.';
+  }
 
   // Step 2: Determine the room to use or create a new one
   let roomId;
